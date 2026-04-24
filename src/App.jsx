@@ -48,33 +48,34 @@ const starterData = {
   ],
 
   rulesTables: [
-    {
-      id: 1,
-      title: "Weapon Permissions",
-      rows: [
-        {
-          tier: "Certified Civilian",
-          permission: "Pistol, melee, shotgun",
-          approval: "No admin approval",
-        },
-        {
-          tier: "Certified Civilian II",
-          permission: "Expanded civilian weapon permissions",
-          approval: "No admin approval unless scenario requires it",
-        },
-        {
-          tier: "Certified Civilian III",
-          permission: "Advanced civilian RP weapon permissions",
-          approval: "Case-by-case for high-impact RP",
-        },
-        {
-          tier: "Certified Civilian IV",
-          permission: "Highest civilian weapon permission tier",
-          approval: "Admin approval not required for standard tier access",
-        },
-      ],
-    },
-  ],
+  {
+    id: 1,
+    title: "Civilian Permissions Matrix",
+    columns: ["Reg Civ", "Cert Civ", "Cert Civ II", "Cert Civ III", "Cert Civ IV"],
+    rows: [
+      {
+        feature: "Custom Vehicles",
+        access: [true, true, true, true, true],
+      },
+      {
+        feature: "Sports / High-End Vehicles",
+        access: [false, true, true, true, true],
+      },
+      {
+        feature: "Business Ownership",
+        access: [false, false, true, true, true],
+      },
+      {
+        feature: "Organized Crime RP",
+        access: [false, false, false, true, true],
+      },
+      {
+        feature: "Military RP",
+        access: [false, false, false, false, true],
+      },
+    ],
+  },
+],
 
   roster: [
     {

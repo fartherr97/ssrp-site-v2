@@ -10,29 +10,36 @@ export default function Rules({ data }) {
       />
 
       {data.rulesTables.map((table) => (
-        <div key={table.id} className="rules-table">
+        <section key={table.id} className="rules-table">
           <h2>{table.title}</h2>
 
-          <table>
-            <thead>
-              <tr>
-                <th>Tier</th>
-                <th>Permissions</th>
-                <th>Approval</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {table.rows.map((row, i) => (
-                <tr key={i}>
-                  <td>{row.tier}</td>
-                  <td>{row.permission}</td>
-                  <td>{row.approval}</td>
+          <div className="permission-table-wrap">
+            <table className="permission-table">
+              <thead>
+                <tr>
+                  <th>Feature / Access</th>
+                  {table.columns.map((column) => (
+                    <th key={column}>{column}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+
+              <tbody>
+                {table.rows.map((row, index) => (
+                  <tr key={index}>
+                    <td>{row.feature}</td>
+
+                    {row.access.map((allowed, i) => (
+                      <td key={i} className="check-cell">
+                        {allowed ? "✅" : ""}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       ))}
     </>
   );

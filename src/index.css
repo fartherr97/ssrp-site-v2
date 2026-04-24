@@ -1121,3 +1121,61 @@ td {
   border-bottom: 1px solid rgba(255,255,255,0.08);
   text-align: left;
 }
+
+.permission-table-wrap {
+  overflow-x: auto;
+}
+
+.permission-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.permission-table th,
+.permission-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.permission-table th {
+  color: #f5b642;
+  font-weight: 750;
+  text-align: center;
+}
+
+.permission-table th:first-child,
+.permission-table td:first-child {
+  text-align: left;
+  width: 260px;
+}
+
+.permission-table td {
+  text-align: center;
+}
+
+.check-cell {
+  font-size: 18px;
+}
+
+.rules-editor-card {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.table-edit-input {
+  width: 100%;
+  background: rgba(255,255,255,.06);
+  color: white;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  padding: 9px 10px;
+  outline: none;
+}
+
+.add-row {
+  margin-top: 14px;
+}
