@@ -1,7 +1,10 @@
-export default function PortalCard({ title, description, icon, onClick, href }) {
+export default function PortalCard({ title, description, icon, iconUrl, onClick, href }) {
   const content = (
     <>
-      <div className="card-icon">{icon || "◆"}</div>
+      <div className="card-icon">
+        {iconUrl ? <img src={iconUrl} alt="" className="card-logo" /> : icon || "◆"}
+      </div>
+
       <h3>{title}</h3>
       <p>{description}</p>
       <span className="card-action">Open Section</span>

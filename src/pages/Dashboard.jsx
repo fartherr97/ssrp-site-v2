@@ -1,59 +1,42 @@
 import PageHeader from "../components/PageHeader";
 import PortalCard from "../components/PortalCard";
 
-export default function Dashboard({ setActivePage }) {
+export default function Dashboard({ data, setActivePage }) {
   return (
     <>
       <PageHeader
         eyebrow="Sunshine State Roleplay"
-        title="Internal Operations Portal"
-        description="Centralized access for civilian operations, staff resources, admin tools, and leadership controls."
+        title="Civilian Operations Portal"
+        description="Centralized hub for registered civilians, certified civilians, civilian leadership, documents, businesses, and tier-based permissions."
       />
 
       <section className="card-grid">
-        <PortalCard
-          title="Civilian Operations"
-          description="Rosters, civilian tiers, document hubs, and civilian resources."
-          icon="🚗"
-          onClick={() => setActivePage("civilian")}
-        />
-        <PortalCard
-          title="Staff Operations"
-          description="Staff roster, admin backend, staff dashboard, and policy resources."
-          icon="🛡️"
-          onClick={() => setActivePage("staff")}
-        />
-        <PortalCard
-          title="Admin Tools"
-          description="Roster management, exam tools, logs, and internal utilities."
-          icon="⚙️"
-          onClick={() => setActivePage("admin")}
-        />
-        <PortalCard
-          title="Leadership Panel"
-          description="Manage reminders, featured member, activity, and portal links."
-          icon="👑"
-          onClick={() => setActivePage("leadership")}
-        />
+        <PortalCard title="Civilian Roster" description="View civilian members and certifications." icon="👥" onClick={() => setActivePage("roster")} />
+        <PortalCard title="Civilian Tiers" description="Review Registered Civ and Certified Civ tiers." icon="🏅" onClick={() => setActivePage("tiers")} />
+        <PortalCard title="Document Hub" description="Access civilian SOPs and resources." icon="📁" onClick={() => setActivePage("documents")} />
+        <PortalCard title="Businesses & Orgs" description="Approved civilian businesses and organizations." icon="🏢" onClick={() => setActivePage("businesses")} />
       </section>
 
       <section className="dashboard-grid">
         <div className="panel large-panel">
-          <h2>Recent Activity</h2>
-          <div className="activity-list">
-            <div>Civilian Operations portal shell created.</div>
-            <div>Staff Operations quick links staged.</div>
-            <div>Leadership Panel frontend drafted.</div>
-            <div>Embedded tool viewer added.</div>
-          </div>
+          <h2>Current Reminder</h2>
+          <p className="muted">{data.reminder}</p>
         </div>
 
         <div className="panel">
-          <h2>Reminders</h2>
-          <p className="muted">
-            This portal should stay focused on civilian and staff use only.
-            Public-facing community pages should remain separate.
-          </p>
+          <h2>Civilian of the Month</h2>
+          <div className="featured-box">{data.civilianOfMonth}</div>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h2>Quick Links</h2>
+        <div className="link-grid">
+          {data.links.map((link) => (
+            <a key={link.id} href={link.url} className="quick-link">
+              {link.title}
+            </a>
+          ))}
         </div>
       </section>
     </>

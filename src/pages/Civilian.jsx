@@ -1,50 +1,77 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import PortalCard from "../components/PortalCard";
 
-const roster = [
-  { name: "John Smith", discord: "johnsmith", tier: "Certified Civilian", status: "Active" },
-  { name: "Alex Morgan", discord: "alexm", tier: "Certified Civilian II", status: "Active" },
-  { name: "Chris Taylor", discord: "ctaylor", tier: "Certified Civilian III", status: "Pending Review" },
-  { name: "Jordan Reed", discord: "jreed", tier: "Certified Civilian IV", status: "Active" },
+const initialRoster = [
+  { id: 1, name: "John Smith", discord: "johnsmith", tier: "Certified Civilian", status: "Active" },
+  { id: 2, name: "Alex Morgan", discord: "alexm", tier: "Certified Civilian II", status: "Active" },
+  { id: 3, name: "Chris Taylor", discord: "ctaylor", tier: "Certified Civilian III", status: "Pending Review" },
+  { id: 4, name: "Jordan Reed", discord: "jreed", tier: "Certified Civilian IV", status: "Active" },
 ];
 
-const tiers = [
-  ["Certified Civilian", "Standard trusted civilian access with foundational RP permissions."],
-  ["Certified Civilian II", "Expanded civilian access for more trusted scenarios."],
-  ["Certified Civilian III", "Advanced civilian trust tier for higher-impact RP."],
-  ["Certified Civilian IV", "Top civilian tier with broader scenario flexibility."],
+const tierOrder = [
+  "Registered Civilian",
+  "Certified Civilian",
+  "Certified Civilian II",
+  "Certified Civilian III",
+  "Certified Civilian IV",
+  "Supervisor",
+  "Manager",
 ];
 
 export default function Civilian() {
+  const [roster, setRoster] = useState(initialRoster);
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState([]);
+  const [bulkTier, setBulkTier] = useState("Certified Civilian");
 
-  const filteredRoster = roster.filter((person) =>
-    `${person.name} ${person.discord} ${person.tier} ${person.status}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  const filteredRoster = useMemo(() => {
+    return roster.filter((person) =>
+      `${person.name} ${person.discord} ${person.tier} ${person.status}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  }, [roster, search]);
+
+  const toggleSelected = (id) => {
+    setSelected((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  };
+
+  const applyBulkTier = () => {
+    setRoster((current) =>
+      current.map((person) =>
+        selected.includes(person.id) ? { ...person, tier: bulkTier } : person
+      )
+    );
+    setSelected([]);
+  };
 
   return (
     <>
       <PageHeader
         eyebrow="Civilian Operations"
         title="Civilian Operations Center"
-        description="Manage civilian resources, rosters, tier information, document hubs, and operational standards."
+        description="Manage civilian rosters, certification tiers, document hubs, and civilian operational standards."
       />
 
       <section className="card-grid">
-        <PortalCard title="Civilian Roster" description="View and manage civilian members." icon="📋" />
+        <PortalCard title="Civilian Roster" description="View, search, and manage civilian members." icon="📋" />
         <PortalCard title="Document Hub" description="Civilian SOPs, guidelines, and references." icon="📁" />
         <PortalCard title="Tier System" description="Certified Civilian tier breakdown." icon="🏅" />
-        <PortalCard title="Businesses / Organizations" description="Standards for official civilian groups." icon="🏢" />
+        <PortalCard title="Organizations" description="Businesses, gangs, and official civilian groups." icon="🏢" />
       </section>
 
       <section className="panel">
         <div className="panel-header">
           <div>
             <h2>Civilian Roster</h2>
-            <p>Demo roster table. This is where your real civilian roster logic will go.</p>
+            <p>
+              Search members, select multiple civilians, and adjust certification tiers.
+            </p>
           </div>
 
           <input
@@ -55,10 +82,35 @@ export default function Civilian() {
           />
         </div>
 
+        {selected.length > 0 && (
+          <div className="bulk-bar">
+            <strong>{selected.length} selected</strong>
+
+            <select
+              className="select-input"
+              value={bulkTier}
+              onChange={(e) => setBulkTier(e.target.value)}
+            >
+              {tierOrder.map((tier) => (
+                <option key={tier}>{tier}</option>
+              ))}
+            </select>
+
+            <button className="primary-button no-margin" onClick={applyBulkTier}>
+              Apply Tier
+            </button>
+
+            <button className="small-button" onClick={() => setSelected([])}>
+              Clear
+            </button>
+          </div>
+        )}
+
         <div className="table-wrap">
           <table>
             <thead>
               <tr>
+                <th></th>
                 <th>Name</th>
                 <th>Discord</th>
                 <th>Tier</th>
@@ -67,7 +119,17 @@ export default function Civilian() {
             </thead>
             <tbody>
               {filteredRoster.map((person) => (
-                <tr key={person.discord}>
+                <tr
+                  key={person.id}
+                  className={selected.includes(person.id) ? "selected-row" : ""}
+                >
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(person.id)}
+                      onChange={() => toggleSelected(person.id)}
+                    />
+                  </td>
                   <td>{person.name}</td>
                   <td>{person.discord}</td>
                   <td>{person.tier}</td>
@@ -85,11 +147,23 @@ export default function Civilian() {
 
       <section className="panel">
         <h2>Certified Civilian Tier System</h2>
+
         <div className="tier-grid">
-          {tiers.map(([tier, desc]) => (
+          {tierOrder.map((tier, index) => (
             <div className="tier-card" key={tier}>
+              <div className="tier-number">{index + 1}</div>
               <h3>{tier}</h3>
-              <p>{desc}</p>
+              <p>
+                {tier === "Registered Civilian"
+                  ? "Basic civilian access with limited permissions."
+                  : tier === "Certified Civilian"
+                  ? "Minimum eligibility for FDOT and Foxhound applications."
+                  : tier === "Certified Civilian IV"
+                  ? "Highest certified civilian tier before leadership roles."
+                  : tier === "Supervisor" || tier === "Manager"
+                  ? "Civilian leadership and operational oversight."
+                  : "Expanded trust tier with additional civilian permissions."}
+              </p>
             </div>
           ))}
         </div>

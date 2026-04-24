@@ -1,17 +1,13 @@
-import {
-  LayoutDashboard,
-  Car,
-  Shield,
-  Wrench,
-  Crown,
-} from "lucide-react";
+import { LayoutDashboard, Users, Medal, Folder, Building2, ShieldCheck, Crown } from "lucide-react";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "civilian", label: "Civilian Operations", icon: Car },
-  { id: "staff", label: "Staff Operations", icon: Shield },
-  { id: "admin", label: "Admin Tools", icon: Wrench },
-  { id: "leadership", label: "Leadership Panel", icon: Crown },
+  { id: "roster", label: "Roster", icon: Users },
+  { id: "tiers", label: "Civilian Tiers", icon: Medal },
+  { id: "documents", label: "Document Hub", icon: Folder },
+  { id: "businesses", label: "Businesses & Orgs", icon: Building2 },
+  { id: "rules", label: "Rules / Permissions", icon: ShieldCheck },
+  { id: "leadership", label: "Leadership", icon: Crown },
 ];
 
 export default function Sidebar({ activePage, setActivePage }) {
@@ -20,20 +16,18 @@ export default function Sidebar({ activePage, setActivePage }) {
       <div className="brand">
         <img src="https://cdn.ssrp.us/images/ssrp.png" className="brand-logo" />
         <div>
-          <div className="brand-title">SSRP Portal</div>
-          <div className="brand-subtitle">Internal Operations Hub</div>
+          <div className="brand-title">Civilian Portal</div>
+          <div className="brand-subtitle">SSRP Civilian Operations</div>
         </div>
       </div>
 
       <nav className="nav-list">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active = activePage === item.id;
-
           return (
             <button
               key={item.id}
-              className={`nav-button ${active ? "active" : ""}`}
+              className={`nav-button ${activePage === item.id ? "active" : ""}`}
               onClick={() => setActivePage(item.id)}
             >
               <Icon size={19} />
@@ -47,7 +41,7 @@ export default function Sidebar({ activePage, setActivePage }) {
         <div className="status-dot" />
         <div>
           <strong>Portal Online</strong>
-          <p>Frontend preview build active.</p>
+          <p>Civilian frontend preview active.</p>
         </div>
       </div>
     </aside>
