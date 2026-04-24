@@ -204,25 +204,59 @@ export default function App() {
   const [activePage, setActivePage] = useState("dashboard");
   const [data, setData] = useState(starterData);
 
-useEffect(() => {
-  async function loadRoster() {
-    try {
-      const res = await fetch(
-        "https://fantastic-acorn-wrj45476rg46hgrvq-3002.app.github.dev/api/civ-roster"
-      );
+  console.log("APP IS RUNNING");
 
-      const roster = await res.json();
+async function loadData() {
+  try {
+    const [
+      rosterRes,
+      tiersRes,
+      businessesRes,
+      documentsRes,
+      settingsRes,
+      rulesRes,
+    ] = await Promise.all([
+      fetch("/api/civ-roster"),
+      fetch("/api/tiers"),
+      fetch("/api/businesses"),
+      fetch("/api/documents"),
+      fetch("/api/settings"),
+      fetch("/api/rules-tables"),
+    ]);
 
-      setData((prev) => ({
-        ...prev,
-        roster,
-      }));
-    } catch (error) {
-      console.error("Failed to load roster:", error);
-    }
+    const [
+      roster,
+      tiers,
+      businesses,
+      documents,
+      settings,
+      rulesTables,
+    ] = await Promise.all([
+      rosterRes.json(),
+      tiersRes.json(),
+      businessesRes.json(),
+      documentsRes.json(),
+      settingsRes.json(),
+      rulesRes.json(),
+    ]);
+
+    setData((prev) => ({
+  ...prev,
+  roster,
+  tiers: tiers.length ? tiers : prev.tiers,
+  businesses,
+  links: documents,
+  rulesTables,
+  reminder: settings.reminder || "",
+  civilianOfMonth: settings.civilianOfMonth || "",
+}));
+  } catch (err) {
+    console.error("Failed to load data:", err);
   }
+}
 
-  loadRoster();
+useEffect(() => {
+  loadData();
 }, []);
 
   const pages = {
@@ -232,7 +266,7 @@ useEffect(() => {
     documents: <Documents data={data} />,
     businesses: <Businesses data={data} />,
     rules: <Rules data={data} />,
-    leadership: <Leadership data={data} setData={setData} />,
+    leadership: <Leadership data={data} setData={setData} loadData={loadData} />
   };
 
   return (

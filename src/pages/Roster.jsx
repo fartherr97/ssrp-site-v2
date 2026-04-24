@@ -287,36 +287,77 @@ function RosterEditModal({ data, setData, close }) {
     }));
   };
 
-  const saveChanges = () => {
+ const saveChanges = async () => {
+  try {
     setSaving(true);
     setSaved(false);
 
-    setTimeout(() => {
-      if (selected.length > 1) applyBulkTier();
+    let updatedRoster = [...data.roster];
 
-      setSaving(false);
-      setSaved(true);
+    // Apply bulk changes BEFORE saving
+    if (selected.length > 1) {
+      updatedRoster = updatedRoster.map((p) =>
+        selected.includes(p.id)
+          ? { ...p, tier: bulkTier, lastMove: todayISO() }
+          : p
+      );
 
-      setTimeout(() => {
-        setSaved(false);
-      }, 1600);
-    }, 450);
+      setData((prev) => ({
+        ...prev,
+        roster: updatedRoster,
+      }));
+    }
+
+    const res = await fetch("/api/civ-roster/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedRoster),
+    });
+
+    if (!res.ok) throw new Error("Failed to save roster");
+
+    setSaving(false);
+    setSaved(true);
+
+    setTimeout(() => setSaved(false), 1600);
+  } catch (err) {
+    console.error("Roster save failed:", err);
+    setSaving(false);
+    alert("Failed to save roster.");
+  }
+};
+
+  const addMember = async () => {
+  if (!newMember.name || !newMember.discord) return;
+
+  const createdMember = {
+    id: Date.now(),
+    ...newMember,
+    discipline: "None",
+    lastMove: todayISO(),
   };
 
-  const addMember = () => {
-    if (!newMember.name || !newMember.discord) return;
+  const updatedRoster = [...data.roster, createdMember];
+
+  try {
+    setSaving(true);
+    setSaved(false);
+
+    const res = await fetch("/api/civ-roster/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedRoster),
+    });
+
+    if (!res.ok) throw new Error("Failed to add member");
 
     setData((prev) => ({
       ...prev,
-      roster: [
-        ...prev.roster,
-        {
-          id: Date.now(),
-          ...newMember,
-          discipline: "None",
-          lastMove: todayISO(),
-        },
-      ],
+      roster: updatedRoster,
     }));
 
     setNewMember({
@@ -331,7 +372,13 @@ function RosterEditModal({ data, setData, close }) {
     setSaved(true);
 
     setTimeout(() => setSaved(false), 1600);
-  };
+  } catch (err) {
+    console.error("Add member failed:", err);
+    alert("Failed to add member.");
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <motion.div
