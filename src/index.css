@@ -1047,3 +1047,77 @@ td {
 .roster-table td:nth-child(6) {
   text-align: center;
 }
+
+:root {
+  --bg-main: #070a12;
+  --bg-panel: #111827;
+  --bg-panel-soft: #161b27;
+
+  --text-main: #f5f5f5;
+  --text-muted: #9ca3af;
+
+  --ssrp-gold: #f5b642;
+  --ssrp-gold-soft: rgba(245, 182, 66, 0.14);
+
+  --ssrp-blue: #3498db;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  --border-soft: rgba(255, 255, 255, 0.08);
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.business-card {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.business-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245,182,66,0.4);
+}
+
+.business-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.business-card h3 {
+  margin: 6px 0;
+}
+
+.business-card span {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.rules-table {
+  margin-top: 20px;
+  background: #111827;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.rules-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rules-table th,
+.rules-table td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}

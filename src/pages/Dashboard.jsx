@@ -11,10 +11,10 @@ export default function Dashboard({ data, setActivePage }) {
       />
 
       <section className="card-grid">
-        <PortalCard title="Civilian Roster" description="View civilian members and certifications." icon="👥" onClick={() => setActivePage("roster")} />
-        <PortalCard title="Civilian Tiers" description="Review Registered Civ and Certified Civ tiers." icon="🏅" onClick={() => setActivePage("tiers")} />
-        <PortalCard title="Document Hub" description="Access civilian SOPs and resources." icon="📁" onClick={() => setActivePage("documents")} />
-        <PortalCard title="Businesses & Orgs" description="Approved civilian businesses and organizations." icon="🏢" onClick={() => setActivePage("businesses")} />
+        <PortalCard title="Civilian Roster" description="View civilian members and certifications." iconUrl="https://cdn.ssrp.us/images/civ.png" onClick={() => setActivePage("roster")} />
+        <PortalCard title="Civilian Tiers" description="Review Registered Civ and Certified Civ tiers." iconUrl="https://cdn.ssrp.us/images/civ.png" onClick={() => setActivePage("tiers")} />
+        <PortalCard title="Document Hub" description="Access civilian SOPs and resources." iconUrl="https://cdn.ssrp.us/images/civ.png" onClick={() => setActivePage("documents")} />
+        <PortalCard title="Businesses & Orgs" description="Approved civilian businesses and organizations." iconUrl="https://cdn.ssrp.us/images/civ.png" onClick={() => setActivePage("businesses")} />
       </section>
 
       <section className="dashboard-grid">

@@ -1,14 +1,39 @@
 import PageHeader from "../components/PageHeader";
 
-export default function Rules() {
+export default function Rules({ data }) {
   return (
     <>
-      <PageHeader eyebrow="Rules / Permissions" title="Civilian Rules & Permissions" description="Tier-based permissions for weapons, vehicles, roleplay scenarios, and admin approval requirements." />
+      <PageHeader
+        eyebrow="Rules / Permissions"
+        title="Rules & Permissions"
+        description="Tier-based civilian permissions and approval requirements."
+      />
 
-      <section className="panel">
-        <h2>Permission Matrix</h2>
-        <p className="muted">This is where the weapon, vehicle, and RP permission table will go next.</p>
-      </section>
+      {data.rulesTables.map((table) => (
+        <div key={table.id} className="rules-table">
+          <h2>{table.title}</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Permissions</th>
+                <th>Approval</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {table.rows.map((row, i) => (
+                <tr key={i}>
+                  <td>{row.tier}</td>
+                  <td>{row.permission}</td>
+                  <td>{row.approval}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
     </>
   );
 }
