@@ -11,13 +11,24 @@ const PORT = process.env.PORT || 3002;
 app.use(cors());
 app.use(express.json());
 
-async function getSheetRows(range) {
-  const auth = new google.auth.GoogleAuth({
-    keyFile: "service-account.json",
+function getGoogleAuth() {
+  if (!process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+    throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_JSON in .env");
+  }
+
+  return new google.auth.GoogleAuth({
+    credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
+}
 
-  const sheets = google.sheets({ version: "v4", auth });
+function getSheetsClient() {
+  const auth = getGoogleAuth();
+  return google.sheets({ version: "v4", auth });
+}
+
+async function getSheetRows(range) {
+  const sheets = getSheetsClient();
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
@@ -28,12 +39,7 @@ async function getSheetRows(range) {
 }
 
 async function updateSheetValues(range, values) {
-  const auth = new google.auth.GoogleAuth({
-    keyFile: "service-account.json",
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-  });
-
-  const sheets = google.sheets({ version: "v4", auth });
+  const sheets = getSheetsClient();
 
   await sheets.spreadsheets.values.update({
     spreadsheetId: process.env.SHEET_ID,
@@ -44,12 +50,7 @@ async function updateSheetValues(range, values) {
 }
 
 async function clearSheetRange(range) {
-  const auth = new google.auth.GoogleAuth({
-    keyFile: "service-account.json",
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-  });
-
-  const sheets = google.sheets({ version: "v4", auth });
+  const sheets = getSheetsClient();
 
   await sheets.spreadsheets.values.clear({
     spreadsheetId: process.env.SHEET_ID,
@@ -99,21 +100,12 @@ app.post("/api/civ-roster/save", async (req, res) => {
     ]);
 
     await clearSheetRange("Roster!A2:H");
+    if (rows.length) await updateSheetValues("Roster!A2:H", rows);
 
-    if (rows.length) {
-      await updateSheetValues("Roster!A2:H", rows);
-    }
-
-    res.json({
-      success: true,
-      message: "Roster saved successfully.",
-    });
+    res.json({ success: true, message: "Roster saved successfully." });
   } catch (err) {
     console.error("Save Roster Error:", err.message);
-    res.status(500).json({
-      error: "Failed to save roster",
-      details: err.message,
-    });
+    res.status(500).json({ error: "Failed to save roster", details: err.message });
   }
 });
 
@@ -315,7 +307,6 @@ app.get("/api/rules-tables", async (req, res) => {
 app.post("/api/rules-tables/save", async (req, res) => {
   try {
     const tables = req.body || [];
-
     const rows = [];
 
     tables.forEach((table) => {
