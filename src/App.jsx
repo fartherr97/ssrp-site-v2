@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
@@ -203,6 +203,27 @@ tiers: [
 export default function App() {
   const [activePage, setActivePage] = useState("dashboard");
   const [data, setData] = useState(starterData);
+
+useEffect(() => {
+  async function loadRoster() {
+    try {
+      const res = await fetch(
+        "https://fantastic-acorn-wrj45476rg46hgrvq-3002.app.github.dev/api/civ-roster"
+      );
+
+      const roster = await res.json();
+
+      setData((prev) => ({
+        ...prev,
+        roster,
+      }));
+    } catch (error) {
+      console.error("Failed to load roster:", error);
+    }
+  }
+
+  loadRoster();
+}, []);
 
   const pages = {
     dashboard: <Dashboard data={data} setActivePage={setActivePage} />,
