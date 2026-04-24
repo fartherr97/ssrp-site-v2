@@ -28,6 +28,45 @@ const starterData = {
     },
   ],
 
+tiers: [
+  {
+    id: 1,
+    name: "Certified Civilian",
+    description: "Minimum eligibility for FDOT and Foxhound applications.",
+    logo: "https://cdn.ssrp.us/images/ssrp.png",
+  },
+  {
+    id: 2,
+    name: "Certified Civilian II",
+    description: "Expanded civilian trust and additional RP flexibility.",
+    logo: "https://cdn.ssrp.us/images/ssrp.png",
+  },
+  {
+    id: 3,
+    name: "Certified Civilian III",
+    description: "Advanced civilian RP permissions.",
+    logo: "https://cdn.ssrp.us/images/ssrp.png",
+  },
+  {
+    id: 4,
+    name: "Certified Civilian IV",
+    description: "Highest certification tier before leadership roles.",
+    logo: "https://cdn.ssrp.us/images/ssrp.png",
+  },
+  {
+    id: 5,
+    name: "Supervisor",
+    description: "Civilian leadership support and oversight.",
+    logo: "https://cdn.ssrp.us/images/ssrp.png",
+  },
+  {
+    id: 6,
+    name: "Manager",
+    description: "Civilian department management and operational control.",
+    logo: "https://cdn.ssrp.us/images/ssrp.png",
+  },
+],
+
   businesses: [
     {
       id: 1,
@@ -168,7 +207,7 @@ export default function App() {
   const pages = {
     dashboard: <Dashboard data={data} setActivePage={setActivePage} />,
     roster: <Roster data={data} setData={setData} />,
-    tiers: <Tiers />,
+    tiers: <Tiers data={data} />,
     documents: <Documents data={data} />,
     businesses: <Businesses data={data} />,
     rules: <Rules data={data} />,

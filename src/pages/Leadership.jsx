@@ -45,6 +45,14 @@ const saveSection = (section) => {
   setTimeout(() => setSavedSection(""), 1600);
 };
 
+const updateTier = (id, field, value) => {
+  setData((prev) => ({
+    ...prev,
+    tiers: prev.tiers.map((tier) =>
+      tier.id === id ? { ...tier, [field]: value } : tier
+    ),
+  }));
+};
 
 const [newBiz, setNewBiz] = useState({
   name: "",
@@ -394,6 +402,46 @@ const removeItem = (type, id) => {
 >
   {savedSection === "businesses" ? "Saved ✓" : "Save Businesses"}
 </button>
+</section>
+
+<section className="panel">
+  <h2>Manage Civilian Tiers</h2>
+
+  <div className="tier-edit-list">
+    {data.tiers.map((tier) => (
+      <div key={tier.id} className="tier-edit-row">
+        <input
+          className="search-input"
+          value={tier.name}
+          onChange={(e) => updateTier(tier.id, "name", e.target.value)}
+          placeholder="Tier Name"
+        />
+
+        <input
+          className="search-input"
+          value={tier.logo}
+          onChange={(e) => updateTier(tier.id, "logo", e.target.value)}
+          placeholder="Logo URL"
+        />
+
+        <textarea
+          className="text-area small-text-area"
+          value={tier.description}
+          onChange={(e) =>
+            updateTier(tier.id, "description", e.target.value)
+          }
+          placeholder="Description"
+        />
+      </div>
+    ))}
+  </div>
+
+  <button
+    className="primary-button"
+    onClick={() => saveSection("tiers")}
+  >
+    {savedSection === "tiers" ? "Saved ✓" : "Save Tiers"}
+  </button>
 </section>
 
 

@@ -1196,3 +1196,38 @@ td {
     grid-template-columns: 1fr;
   }
 }
+
+.tier-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 8px rgba(245, 182, 66, 0.25));
+}
+
+.tier-edit-list {
+  display: grid;
+  gap: 12px;
+}
+
+.tier-edit-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 2fr;
+  gap: 10px;
+  align-items: start;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.small-text-area {
+  min-height: 48px;
+  resize: vertical;
+}
+
+@media (max-width: 1000px) {
+  .tier-edit-row {
+    grid-template-columns: 1fr;
+  }
+}
