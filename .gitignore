@@ -24,5 +24,3 @@ dist-ssr
 *.sw?
 service-account.json
 .env
-.env
-service-account.json
